@@ -1,0 +1,262 @@
+nav#normalNavBar {
+  color: black;
+  text-align: center;
+  height: 5.1em;
+  line-height: 4em;
+  width: 80%;
+  display: inline;
+}
+
+nav#normalLoginBar {
+  color: white;
+  text-align: right;
+  height: 2.90em;
+  line-height: 1.84em;
+  width: 98%;
+  display: inline;
+}
+
+div#loginNavBar {
+  background-color: red;
+}
+
+div#loginNavBar a.pure-menu-link:hover {
+  background-color: darkred;
+}
+
+
+div#topNavBar a.pure-menu-link:hover {
+  background-color: white;
+}
+
+div#topNavBar {
+  background-color: white;
+}
+
+#loginNavBar a.pure-menu-link {
+  color: white;
+  background-color: red;
+}
+
+a.pure-menu-link {
+  color: black;
+}
+
+a.pure-menu-link:hover {
+  color: red;
+}
+
+ul.dropdown_list {
+  border: 2px gray solid;
+}
+
+li.dropdown_links {
+  min-width: 8em;
+  line-height: 2vh;
+  background-color: white;
+  text-align: left;
+}
+
+li.ham_dropdown_links {
+  width: 80%;
+  margin-left: 20%;
+  background-color: darkgray;
+  text-align: left;
+}
+
+div#content {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  text-align: center;
+  border-radius: 0.5em;
+}
+
+div#content-left {
+  margin-left: 10%;
+  width: 80%;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  background-color: white;
+  text-align: center;
+  border-radius: 0.5em;
+}
+
+div#content-left-large {
+  margin-left: 4%;
+  width: 96%;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  background-color: white;
+  text-align: center;
+  border-radius: 0.5em;
+}
+
+.content-right {
+  margin-left: 10%;
+  width: 80%;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  background-color: white;
+  text-align: center;
+  border-radius: 0.5em;
+}
+
+div#content-right-large {
+  margin-right: 4%;
+  width: 96%;
+  padding-top: 8px;
+  background-color: white;
+  text-align: center;
+  border-radius: 0.5em;
+}
+
+div#main_content {
+  margin-top: 1em;
+}
+
+div.separator {
+  padding-top: 1em;
+}
+
+div.separator-footer {
+  padding-top: 3em;
+}
+
+body {
+  background-color: #F1F1F1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+footer#footer {
+  margin-top: auto;
+  bottom: 0;
+  background-color: white;
+  height: auto;
+  width: 100%;
+  text-align: center;
+
+}
+
+span.a_z_heads {
+  font-size: larger;
+}
+
+header h1 {
+  text-align: center;
+}
+
+.custom-restricted-width{
+  text-align: center;
+}
+
+div#logo {
+  width: 10%;
+  display: inline;
+  text-align: center;
+  height: 2.5em;
+  line-height: 2.5em;
+  font-size: xx-large;
+}
+
+div#hamburger {
+  display: inline;
+  width: 10%;
+  text-align: center;
+  height: 2.5em;
+  line-height: 2.5em;
+  font-size: xx-large;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+div#hamburger:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+
+div#hamburger > i#ham {
+  pointer-events: auto;
+}
+
+nav#hamburgerNavBar {
+  display: none;
+}
+
+div#logo img {
+  width: auto;
+  height: 100%;
+}
+
+div#a_z_div {
+  margin: 1em;
+  padding-bottom: 1em;
+  background-color: white;
+  border-radius: 0.5em;
+}
+
+img.a_z_thumbnail {
+  max-height: 3.1em;
+  max-width: 100%;
+  object-fit: scale-down;
+  border-radius: 0.25em;
+  box-shadow: 0 0 0.075em;
+  margin: 0 auto;
+}
+
+a.a_z_link {
+  top: 25%;
+  left: 0.2em;
+  position: relative;
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+}
+
+a.a_z_link:hover {
+  color:red;
+}
+
+div.individual_a_z {
+  margin: 1em 0;
+}
+
+div.a_z_link_div {
+  text-align: left;
+}
+
+/* Media query to switch the top nav bar to a hamburger menu 
+   if the screen width goes below 1050px. */
+@media only screen and (max-width: 1070px) {
+  nav#normalNavBar {
+    visibility: hidden;
+  }
+
+  div#hamburger {
+    visibility: visible;
+  }
+}
+
+/* This just makes it so if the user clicks the hamburger menu, and 
+   then the screen width increases to greater than 1070px, then 
+   the hamburger menu will disappear. */
+@media only screen and (min-width: 1070px) {
+  ul#hamburger_list {
+    display: none;
+  }
+}
+
+h2#footer_h2 {
+  display: block;
+  font-size: 1.5em;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+}
+
+div#looking_for_post {
+  text-align: right;
+}

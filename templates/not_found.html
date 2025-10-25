@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Not Found
+{% endblock %}
+
+{% block css_links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/not_found.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="separator"></div>
+  <div class="pure-g">
+    <div class="pure-u-1-4"></div>
+    <div class="pure-u-2-4" id="not_found">
+      <h2>404</h2>
+      <h4>Not Found</h4>
+      <p>The requested URL could not be found on this server.</p>
+
+      <div>
+        <a href="/" class="pure-button">Home</a>
+        <a href="/post/create" class="pure-button">New Post</a>
+      </div>
+    </div>
+    <div class="pure-u-1-4"></div>
+  </div>
+  <div class="separator"></div>  
+{% endblock %}

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/baseStyle.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.bubble.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% block css_links %}{% endblock %}
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://kit.fontawesome.com/31f1566f16.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+    {% block js_scripts %}{% endblock %}
+
+    <link rel="icon" type="image/x-icon" href="{{favicon_url}}">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+    <div class="pure-g" id="loginNavBar">
+      <nav id="normalLoginBar" class="pure-menu pure-menu-horizontal pure-u-3-4">
+        {% if session.get("user") != None %}
+          <ul class="pure-menu-list">
+            <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+              <a href="#" class="pure-menu-link"> {{session["user"]["userinfo"]["name"]}}</a>
+              <ul class="pure-menu-children" id="loginBar">
+                <li class="pure-menu-item dropdown_links">
+                  <a href="/profile" class="pure-menu-link">Profile</a>
+                </li>
+                <li class="pure-menu-item dropdown_links">
+                  <a href="/post/create" class="pure-menu-link">New Post</a>
+                </li>
+                <li class="pure-menu-item dropdown_links">
+                  <a href="/logout" class="pure-menu-link">Logout</a>
+                </li>
+              </ul>
+            </li>
+        {% else %}
+          <li class="pure-menu-item">
+            <a href="/login" class="pure-menu-link"><i class="fa-solid fa-user"></i> Log in / Sign up</a>
+          </li>
+        {% endif %}
+      </nav>
+    </div>
+
+    <div class="pure-g" id="topNavBar">
+      <div id="logo" class="pure-u-3-24">
+        <img src="{{ logo_url }}" alt="Mario Wiki">
+      </div>
+      <nav id="normalNavBar" class="pure-menu pure-menu-horizontal pure-u-3-4">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="/" class="pure-menu-link"><i class="fa-solid fa-house"></i> Home</a>
+          </li>
+          <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="/categories/characters" class="pure-menu-link"><i class="fa-solid fa-ghost"></i> Characters</a>
+            <ul class="pure-menu-children dropdown_list">
+              {% for tag in data.tags["characters"] %}
+                <li class="pure-menu-item dropdown_links">
+                  <a href="/categories/characters/?tag={{ tag[0] | lower }}" class="pure-menu-link">{{ tag[0] }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="/categories/games" class="pure-menu-link"><i class="fa-solid fa-gamepad"></i> Games</a>
+            <ul class="pure-menu-children dropdown_list">
+              {% for tag in data.tags["games"] %}
+                <li class="pure-menu-item dropdown_links">
+                  <a href="/categories/games/?tag={{ tag[0] | lower }}" class="pure-menu-link">{{ tag[0] }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="/categories/content" class="pure-menu-link"><i class="fa-solid fa-flag"></i> Content</a>
+            <ul class="pure-menu-children dropdown_list">
+              {% for tag in data.tags["content"] %}
+                <li class="pure-menu-item dropdown_links">
+                  <a href="/categories/content/?tag={{ tag[0] | lower }}" class="pure-menu-link">{{ tag[0] }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/community" class="pure-menu-link"><i class="fa-solid fa-user-group"></i> Community</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/search" class="pure-menu-link"><i class="fa-solid fa-magnifying-glass"></i></a>
+          </li>
+        </ul>
+      </nav>
+      <div id="hamburger" class="pure-u-3-24">
+        <i id="ham" class="fa fa-bars"></i>
+      </div>
+    </div>
+
+    <nav id="hamburgerNavBar" class="pure-menu custom-restricted-width">
+      <ul class="pure-menu-list" id="hamburger_list">
+        <li class="pure-menu-item">
+          <a href="/" class="pure-menu-link"><i class="fa-solid fa-house"></i> Home</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="/categories/characters" class="pure-menu-link"><i class="fa-solid fa-ghost"></i> Characters</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="/categories/games" class="pure-menu-link"><i class="fa-solid fa-gamepad"></i> Games</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="/categories/content" class="pure-menu-link"><i class="fa-solid fa-flag"></i> Content</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="/community" class="pure-menu-link"><i class="fa-solid fa-user-group"></i> Community Feed</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="/search" class="pure-menu-link"><i class="fa-solid fa-magnifying-glass"></i> Search</a>
+        </li>
+      </ul>
+    </nav>
+
+    <header>
+      {% block header %}{% endblock %}
+    </header>
+    {% block content %}{% endblock %}
+    <div class="pure-g" style="background-color: red; ">
+      <div class="pure-u-1-2 pure-u-xl-1-3">
+        <div class="pre-footer" style="vertical-align: middle">
+          <img src="{{ logo_url }}" alt="Mario Wiki" style="width: 45%; vertical-align: middle">
+        </div>
+      </div>
+      <div class="pure-u-xl-1-3"></div>
+      <div class="pure-u-1-2 pure-u-xl-1-3">
+        <div id="looking_for_post">
+          <h3 style="display: inline-block; color:white; margin-top:6%; margin-right: 0.5em;">Looking to create an article?</h3>
+          <a class="pure-button" href="/post/create" style="margin-right: 1em; color:white; background-color: darkred; font-weight: bold; margin-bottom:0.25em;">New Post</a>
+        </div>
+      </div>
+    </div>
+
+
+    <footer id="footer">
+      {% if data.get("category") %}
+        <h2 id="footer_h2">Browse {{ data.category }} A-Z</h2>
+      {% else %}
+        <h2 id="footer_h2">Browse A-Z</h2>
+      {% endif %}
+      <div id="a_z_div" class="pure-g">
+        <div id="num_h" class="pure-u-1 pure-u-lg-1-3">
+          {% for key in data["a_z_dicts"]["num_h"] %}
+            {% if data["a_z_dicts"]["num_h"][key] | length > 0 %}
+              <h3 id="{{key}}"><span class="a_z_heads">{{ key }}</span></h3>
+            {% endif %}
+            {% for post in data["a_z_dicts"]["num_h"][key] %}
+              {% set post_link = data.post_url + post["category"].lower() + "/?page=" + post["title"] %}
+              <div class="individual_a_z">
+                <div class="pure-g">
+                  <div class="pure-u-1-3"></div>
+                  <div class="pure-u-1-6">
+                    <img class="a_z_thumbnail pure-img" src="{{post['thumbnail']}}" alt="thumbnail">
+                  </div>
+                  <div class="a_z_link_div pure-u-1-2">
+                    <a class="a_z_link" href="{{post_link}}">{{ post["title"] }}</a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <div id="i_q" class="pure-u-1 pure-u-lg-1-3">
+          {% for key in data["a_z_dicts"]["i_q"] %}
+            {% if data["a_z_dicts"]["i_q"][key] | length > 0 %}
+              <h3 id="{{key}}"><span class="a_z_heads">{{ key }}</span></h3>
+            {% endif %}
+            {% for post in data["a_z_dicts"]["i_q"][key] %}
+              {% set post_link = data.post_url + post["category"].lower() + "/?page=" + post["title"] %}
+              <div class="individual_a_z">
+                <div class="pure-g">
+                  <div class="pure-u-1-3"></div>
+                  <div class="pure-u-1-6">
+                    <img class="a_z_thumbnail pure-img" src="{{post['thumbnail']}}" alt="thumbnail">
+                  </div>
+                  <div class="a_z_link_div pure-u-1-2">
+                    <a class="a_z_link" href="{{post_link}}">{{ post["title"] }}</a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <div id="r_z" class="pure-u-1 pure-u-lg-1-3">
+          {% for key in data["a_z_dicts"]["r_z"] %}
+            {% if data["a_z_dicts"]["r_z"][key] | length > 0 %}
+              <h3 id="{{key}}"><span class="a_z_heads">{{ key }}</span></h3>
+            {% endif %}
+            {% for post in data["a_z_dicts"]["r_z"][key] %}
+              {% set post_link = data.post_url + post["category"].lower() + "/?page=" + post["title"] %}
+              <div class="individual_a_z">
+                <div class="pure-g">
+                  <div class="pure-u-1-3"></div>
+                  <div class="pure-u-1-6">
+                    <img class="a_z_thumbnail pure-img" src="{{post['thumbnail']}}" alt="thumbnail">
+                  </div>
+                  <div class="a_z_link_div pure-u-1-2">
+                    <a class="a_z_link" href="{{post_link}}">{{ post["title"] }}</a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+    </footer>
+    <div class="separator-footer" style="background-color: white;"></div>
+  </body>
+</html>

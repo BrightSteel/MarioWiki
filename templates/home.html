@@ -1,0 +1,84 @@
+{% extends "base_multibar.html" %}
+
+{% block css_links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block js_scripts %}
+  <script async defer src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}
+
+{% block title %}Home{% endblock %}
+
+{% block main_content %}
+  {% for recent_post in data.recent_posts %}
+    {% set post_link = data.post_url + recent_post[2].lower() + "/?page=" + recent_post[0] %}
+    <div class="post ql-editor">
+
+      <h2 class="post_title"><a class=hidden-link-button href='{{post_link}}'>{{recent_post[0]}}</a></h2>
+      <div class="author">
+        <div class="pure-g">
+          <div class="pure-u-1-9">
+            <img class="avatar_img pure-img" src="{{recent_post[6]}}" alt="Avatar">
+          </div>
+          <div class="pure-u-1-9">
+            <h4 class="author_name"><a id="author_link" href="{{ url_for('profile.get_profile_page', username=recent_post[5]) }}">{{recent_post[5]}}</a></h4>
+          </div>
+          <div class="pure-u-1-9">
+            <p class="post_date">• {{recent_post[3]}}</p>
+          </div>
+        </div>
+      
+      </div>
+      <div class="post-content">
+        {{recent_post[1]|safe}} 
+      </div>
+      
+      <i id="like_button_{{recent_post[7]}}" class="like_button fa-regular fa-heart fa-lg"></i>
+      <div class="button_like" data-id="{{recent_post[7]}}"></div>
+      <!-- get the loading_url and error html-->
+      <div id="loading-url" style="display:none">{{ loading_url }}</div>
+      <div id="error-url" style="display:none">{{ error_url }}</div>
+      <div id="read-more-button">
+          <a class=hidden-link-button href='{{post_link}}'><button class="pure-button">Read More</button></a>
+      </div>
+    </div>
+    <div class="separator"></div>
+  {% endfor %}
+  <h4>Page {{data.page + 1}}</h4>
+  <div class="page-buttons">
+    {% if data.page > 0 %}
+      <a id="left-page-button" href="?page={{data.page-1}}"><i class="fa-solid fa-square-caret-left fa-lg"></i></a>
+    {% else %}
+      <a id="left-page-button"><i class="fa-regular fa-square-caret-left fa-lg"></i></a>
+    {% endif %}
+
+    {% if data.page < data.page_count-1 %}
+      <a id = "right-page-button" href="?page={{data.page+1}}"><i class="fa-solid fa-square-caret-right fa-lg"></i></a>
+    {% else %}
+      <a id="right-page-button"><i class="fa-regular fa-square-caret-right fa-lg"></i></a>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block right_content %}
+  <h2>Trending Tags</h2>
+  {% for trending_tag in data.trending_tags %}
+    <div class="trending-tag-section">
+      <a href="/categories/{{trending_tag[0].lower()}}/?tag={{trending_tag[1].lower()}}"><button class="pure-button"># {{trending_tag[1]}}</button></a> <p class="trending-tag-text"> {{trending_tag[2]}} posts <span class="trending-tag-cat">in {{trending_tag[0]}}<span></p>
+    </div>
+  {% endfor %}
+{% endblock %}
+
+{% block left_content %}
+  <h2>About Us</h2>
+  <p class="padded-info">
+    Welcome to the Mario Wiki, a large encyclopedia of community gathered information surrounding the Mario World.
+  </p>
+  <p class="padded-info">
+    Whether you are looking for information surrounding the newest <a href="/categories/games">Mario Game</a>, a specific <a href="/categories/characters">Character</a>, or how to beat a hard <a href="/categories/content">level</a>, we are the best source of information where anyone can edit.
+  </p>
+  <p class="padded-info">
+    We are currently editing {{data.post_count[0]}} articles!
+  </p>
+{% endblock %}

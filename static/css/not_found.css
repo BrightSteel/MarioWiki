@@ -1,0 +1,45 @@
+#not_found {
+  text-align: center;
+  line-height: normal;
+  height: auto;
+  box-sizing: initial;
+  white-space: normal;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+  padding-top: 0.5em;
+  margin-top: -0.5em;
+  background-color: white;
+  border-radius: 0.5em;
+  width: 50%;
+}
+
+.separator {
+  padding-bottom: 1em;
+}
+
+h2 {
+  font-size: 60px;
+  margin-bottom: 0.5em;
+}
+
+h4 {
+  margin-top: -0.5em;
+  margin-bottom: -0.3em;
+  font-size: 40px;
+}
+
+a {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+h2#already_exists_h2 {
+  font-size: x-large;
+  margin-bottom: 0.5em;
+}
+h4#view_page_here {
+  margin-top: -0.5em;
+  margin-bottom: -0.3em;
+  font-size: large;
+}

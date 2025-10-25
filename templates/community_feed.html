@@ -1,0 +1,211 @@
+{% extends "base_multibar.html" %}
+
+{% block css_links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/community_feed.css') }}">
+{% endblock %}
+{% block js_scripts %}
+  <script src="{{ url_for('static', filename='js/community_feed.js') }}"></script>
+{% endblock %}
+
+{% block title %}Community{% endblock %}
+
+{% block left_content %}
+  <div id="filter-feed">
+    <form id="filterForm" method="get" class="pure-form pure-form-stacked">
+      <fieldset>
+        <div id="advancedFilter">Filter Feed</div>
+          <div id="filterOptions">
+            <div id="categoryOptions">
+              <span class="pure-form-message">Category:</span>
+              <label for="characters" class="pure-checkbox">
+                <input type="checkbox" id="characters" name="categories_filter" value="Characters">Characters
+              </label>
+              <label for="games" class="pure-checkbox">
+                <input type="checkbox" id="games" name="categories_filter" value="Games">Games
+              </label>
+              <label for="content" class="pure-checkbox">
+                <input type="checkbox" id="content" name="categories_filter" value="Content">Content
+              </label>
+            </div>
+            <button class="pure-button pure-button-primary">Apply Filters</button>
+          </div>
+      </fieldset>
+    </form>
+  </div>
+  {% if session.get("user") %}
+    <div id="followers-toggle">
+      <p>Following Only</p>
+      <label class="switch">
+        {% if data.follow_btn_checked %}
+          <input id="followersBtn" type="checkbox" checked>
+        {% else %}
+          <input id="followersBtn" type="checkbox">
+        {% endif %}
+        <span class="slider round"></span>
+      </label>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block main_content %}
+  <div id="make_post_div">
+    {% if session.get("user") %}
+      <div class="pure-g">
+        <div class="pure-u-1-4">
+          <img id="discussion-avatar" class="pure-img" src="{{data.user_img}}" alt="Avatar">
+        </div>
+        <div class="pure-u-1-2">
+          <h4>Whats on your mind, {{session["user"]["userinfo"]["name"]}}?</h4>
+        </div>
+        <div class="pure-u-1-4">
+          <div id="makePost">
+            <a class="pure-button" id="create-discussion">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+          </div>
+        </div> 
+        <div class="pure-u-1">
+          <div id="postDicussionDiv">
+            <form id="discussionForm" class="pure-form" action="/community/discussion/create" method="post">
+              <fieldset>
+                <div id="discussionTitle">
+                  <label for="stacked-title">Title: </label>
+                  <input type="text" name="title" id="stacked-title" placeholder="Title" required maxlength="64"/>
+                </div>
+                <div id="postFilter">
+                  <label for="stacked-cat">Posting in Forum: </label>
+                    <select name="category" id="stacked-category" required>
+                      <option value="">Select Category</option>
+                      {% for category in data.categories %}
+                        <option value={{category[0]}}>{{category[0]}}</option>
+                      {% endfor %}
+                    </select>
+                </div>
+                <div class="editor-container">
+                  <div id="editor" style='height: 45vh;'>
+                  </div>
+                </div>
+                <input type="hidden" name="content" id="discussionData">
+                <div id="cancelPost-container">
+                  <button id="cancel-post" type="button" class="pure-button">Cancel</button>
+                  <button class="pure-button pure-button-primary">Submit Post</button>
+                </div>    
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <h4>Please login to make a post</h4>
+    {% endif %}
+  </div>
+  <div class="separator"></div>
+  {% if data.follow_btn_checked == False %}
+    {% for recent_post in data.recent_posts %}
+      <div class="post ql-editor">
+        <h2 id="discussion_header"><a class="hidden-link-button" href="{{ url_for('create_post.detail', post_id=recent_post[7]) }}">{{recent_post[0]}}</a></h2>
+        <div class="author">
+          <div class="pure-g">
+            <div class="pure-u-1-9">
+              <img class="avatar_img pure-img" src="{{recent_post[6]}}" alt="Avatar">          
+            </div>
+            <div class="pure-u-1-9">
+              <h4 class="author_name"><a id="author_link" href="{{ url_for('profile.get_profile_page', username=recent_post[5]) }}">{{recent_post[5]}}</a></h4>
+            </div>
+            <div class="pure-u-1-9">
+              <p class="post_date">• {{recent_post[3]}} </p>
+            </div>
+          </div>              
+        </div>
+        <div class="post-content">
+          {{recent_post[1]|safe}} 
+        </div>
+        <!-- get the loading_url and error html-->
+        <div id="loading-url" style="display:none">{{ loading_url }}</div>
+        <div id="error-url" style="display:none">{{ error_url }}</div>
+        <i id="like_button_{{recent_post[7]}}" class="like_button fa-regular fa-heart fa-lg"></i>
+        <div class="button_like" data-id="{{recent_post[7]}}"></div>
+        <a class="hidden-link-button" href="{{ url_for('create_post.detail', post_id=recent_post[7]) }}"><i id="comment_button" class="fa-regular fa-comment fa-lg"></i>&nbsp;&nbsp;&nbsp;{{recent_post[8]}}</a>
+      </div>
+      <div class="separator"></div>
+    {% endfor %}
+  {% endif %}
+  {% if data.follow_btn_checked %}
+    {% for users_posts in data.posts_by_following %}
+      {% for post in users_posts %}
+        <div class="post ql-editor">
+          <h2 id="discussion_header"><a class="hidden-link-button" href="{{ url_for('create_post.detail', post_id=post[7]) }}">{{post[0]}}</a></h2>
+          <div class="author">
+            <div class="pure-g">
+              <div class="pure-u-1-9">
+                <img class="avatar_img pure-img" src="{{post[6]}}" alt="Avatar">
+              </div>
+              <div class="pure-u-1-9">
+                <h4 class="author_name"><a id="author_link" href="{{ url_for('profile.get_profile_page', username=post[5]) }}">{{post[5]}}</a></h4>
+              </div>
+              <div class="pure-u-1-9">
+                <p class="post_date">• {{post[3]}} </p>
+              </div>
+            </div>
+          </div>
+          <div class="post-content">
+            {{post[1]|safe}} 
+          </div>
+          <!-- get the loading_url and error html-->
+          <div id="loading-url" style="display:none">{{ loading_url }}</div>
+          <div id="error-url" style="display:none">{{ error_url }}</div>
+          <i id="like_button_{{post[7]}}" class="like_button fa-regular fa-heart fa-lg"></i>
+          <div class="button_like" data-id="{{post[7]}}"></div>
+          <a class="hidden-link-button" href="{{ url_for('create_post.detail', post_id=post[7]) }}"><i id="comment_button" class="fa-regular fa-comment fa-lg"></i>&nbsp;&nbsp;&nbsp;{{post[8]}}</a>
+        </div>
+        <div class="separator"></div>
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
+  <div class="page-buttons">
+    {% if data.filters %}
+      {% set next_page_link = data.next_page_url + "&page=" %}
+      {% set prev_page_link = data.next_page_url + "&page=" %}
+    {% else %}
+      {% set next_page_link = data.next_page_url + "/?page=" %}
+      {% set prev_page_link = data.next_page_url + "/?page=" %}
+    {% endif %}
+    <h4>Page {{data.page + 1}}</h4>
+    {% if data.page > 0 %}
+      <a id="left-page-button" href="{{prev_page_link}}{{data.page-1}}"><i class="fa-solid fa-square-caret-left fa-lg"></i></a>
+    {% else %}
+      <a id="left-page-button"><i class="fa-regular fa-square-caret-left fa-lg"></i></a>
+    {% endif %}
+
+    {% if data.page < data.page_count-1 %}
+      <a id = "right-page-button" href="{{next_page_link}}{{data.page+1}}"><i class="fa-solid fa-square-caret-right fa-lg"></i></a>
+    {% else %}
+      <a id="right-page-button"><i class="fa-regular fa-square-caret-right fa-lg"></i></a>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block right_content %}
+  <h2>Community Activity</h2>
+  <div id="category-activity-div">
+    <h4>Games</h4>
+    {% if data.games_category_count %}
+      <span><i class="fa-regular fa-comments"></i> {{data.games_category_count}} Posts • New Reply {{data.recent_games[3]}} ago</span>
+    {% else %}
+      <span> There are no discussion posts in this category</span>
+    {% endif %}
+    <h4>Character</h4>
+    {% if data.character_category_count %}
+      <span><i class="fa-regular fa-comments"></i> {{data.character_category_count}} Posts • New Reply {{data.recent_character[3]}} ago</span>
+    {% else %}
+      <span> There are no discussion posts in this category</span>
+    {% endif %}
+    <h4>Content</h4>
+    {% if data.content_category_count %}
+      <span><i class="fa-regular fa-comments"></i> {{data.content_category_count}} Posts • New Reply {{data.recent_content[3]}} ago</span>
+    {% else %}
+      <span> There are no discussion posts in this category</span>
+    {% endif %}
+  </div>
+{% endblock %}
+

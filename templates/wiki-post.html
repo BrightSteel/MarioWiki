@@ -1,0 +1,69 @@
+{% extends "base_leftbar.html" %}
+
+{% block title %}
+  {{ data.title }}
+{% endblock %}
+
+{% block css_links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/wiki-post.css') }}">
+{% endblock %}
+
+{% block js_scripts %}
+  <script src="{{ url_for('static', filename='js/wiki_post.js') }}"></script>
+{% endblock %}
+
+{% block left_content %}
+  <div class="left-menu">
+    <a id="main_link" href="#{{ data.title }}">{{ data.title }}</a>
+    <ol class="contents_links">
+      {% for header in data.headers %}
+        <li><a href="#{{ header['h2'][1] }}">{{ header['h2'][0] }}</a></li>
+        <ol class="contents_links">
+          {% for h3 in header['h3s'] %}
+            <li><a href="#{{ h3['h3'][1] }}">{{ h3['h3'][0] }}</a></li>
+            <ol class="contents_links">
+              {% for h4 in h3['h4s'] %}
+                <li><a href="#{{ h4[1] }}">{{ h4[0] }}</a></li>
+              {% endfor %}
+            </ol>
+          {% endfor %}
+        </ol>
+      {% endfor %}
+    </ol>
+  </div>
+{% endblock %}
+
+{% block main_content %}
+  <div id="main-wiki" class="ql-editor" data-id="{{data.post_id}}">
+    <div class="wiki-title">
+      {% if session.get("user") %}
+        <div id="edit-delete">
+          <button class="pure-button" id="edit-btn">Edit Post</button>
+          {% if session.get("user").get("userinfo").get("sub") == data.author_id%}
+            <button class="pure-button" id="delete-btn">Delete Post</button>
+          {% endif %}
+        </div>
+      {% endif %}
+      <h1 id="{{ data.title }}">{{ data.title }}</h1>
+      <h4><a id="author_link" href="{{ url_for('profile.get_profile_page', username=data.author) }}">@{{ data.author }}</a></h4>
+      <h4>{{ data.category }}</h4>
+      <!-- get the loading_url and error html-->
+      <div id="loading-url" style="display:none">{{ loading_url }}</div>
+      <div id="error-url" style="display:none">{{ error_url }}</div>
+      <i id="like_button_{{data.post_id}}" class="like_button fa-regular fa-heart fa-lg"></i>
+      <div class="button_like" data-id="{{data.post_id}}"></div>
+      <h4>{{ data.date }}</h4>
+      <hr>
+    </div>
+    <form id="form{{data.post_id}}" method="post" style="display: none;">
+      <input type="hidden" name="hidden" value="{{data.post_id}}">
+      <input type="hidden" id="update{{data.post_id}}" name="update">
+      <div id="editor{{data.post_id}}" style="height: 50vh;"></div>
+      <button class="pure-button" id ="update-btn">Update</button>
+      <button class="pure-button" type="button" id="cancel-btn">Cancel</button>
+    </form>
+    <p class="content_paragraph">
+      {{ data.content | safe }}
+    </p>
+  </div>
+{% endblock %}

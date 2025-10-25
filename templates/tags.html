@@ -1,0 +1,49 @@
+{% extends "base_leftbar.html" %}
+
+{% block css_links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tags.css') }}">
+{% endblock %}
+
+{% block title %}{{ data.tag }}{% endblock %}
+
+{% block left_content %}
+  <div class="pure-menu">
+    <span class="pure-menu-heading">All {{ data.category }} Tags</span>
+    <ul class="pure-menu-list">
+      {% for tag in data.tags[data.category.lower()] %}
+        <li class="pure-menu-item">
+          <a href="?tag={{tag[0] | lower }}" class="pure-menu-link">{{ tag[0] }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
+
+{% block main_content %}
+  {% for post in data.tag_posts %}
+    {% set post_link = data.post_url + data.category.lower() + "/?page=" + post.title %}
+    <div class="tag_post post ql-editor">
+      <h2 class="post_title"><a class="hidden-link-button" href="{{ post_link }}">{{ post.title }}</a></h2>
+      <div class="post-content">
+        {{ post.raw_text }}
+      </div>
+    </div>
+    <div class="separator"></div>
+  {% endfor %}
+
+  <h4 id="page_header">Page {{ data.page + 1 }}</h4>
+  <div class="page-buttons">
+    {% if data.page > 0 %}
+      <a id="left-page-button" href="?tag={{data.tag}}&page={{data.page-1}}"><i class="fa-solid fa-square-caret-left fa-lg"></i></a>
+    {% else %}
+      <a id="left-page-button"><i class="fa-regular fa-square-caret-left fa-lg"></i></a>
+    {% endif %}
+
+    {% if data.page < data.page_count-1 %}
+      <a id="right-page-button" href="?search_query={{data.query}}&page={{data.page+1}}&filter={{data.filter}}"><i class="fa-solid fa-square-caret-right fa-lg"></i></a>
+    {% else %}
+      <a id="right-page-button"><i class="fa-regular fa-square-caret-right fa-lg"></i></a>
+    {% endif %}
+  </div>
+{% endblock %}

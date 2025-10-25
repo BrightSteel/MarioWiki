@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block css_links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block js_scripts %}
+  <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}
+
+{% block title %}{{data.user_name}}{% endblock %}
+
+{% block header %}
+  {% if data.own_profile %}
+    <h1>{{data.user_name}}, welcome back!</h1>
+  {% else %}
+    <h1>{{data.user_name}}'s Page</h1>
+  {% endif %}
+{% endblock %}
+
+
+{% block content %}
+  <div class="pure-g">
+    <div class="pure-u-1 pure-u-lg-1-4">
+      <div id="content-left">
+        <div class="blog">
+          <div class="pic">
+            <img src="{{ data.user_img }}" alt="User Image">
+          </div>
+          <div class="pure-g" id="upload-img">
+            <form action="/profile/upload" method="POST" enctype="multipart/form-data" id="upload-form" style="display: none;">
+              <label for="photo">Upload a new profile picture:</label>
+              <input type="file" name="photo" accept="image/*">
+              <button type="submit">Upload Photo</button>
+            </form>
+          </div>
+          <div class="pure-g userinfo">
+            <div class="username">{{ data.user_name }}</div>
+            {% if data.follower_count == 1 %}
+              <div class="userpos">{{ data.post_count }} posts &nbsp;|&nbsp; {{ data.follower_count }} follower</div>
+            {% else %}
+              <div class="userpos">{{ data.post_count}} posts &nbsp;|&nbsp; {{data.follower_count}} followers</div>
+            {% endif %}
+            <div class="userbio">{{ data.user_bio | safe}}</div>
+            {% if session.get("user") %}
+              {% if data.own_profile == False %}
+                {% if data.is_follower %}
+                  <form action="/profile/unfollow/{{data.user_id}}" method="post">
+                    <button class="pure-button" id="unfollow-btn">Unfollow</button>
+                  </form>
+                {% else %}
+                  <form action="/profile/follow/{{data.user_id}}" method="post">
+                    <button class="pure-button" id="follow-btn">Follow</button>
+                  </form>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+            {% if data.own_profile %}
+              <button class="button-success pure-button update" id="update-btn">Update</button>
+            {% endif %}
+            <form action="/profile" method="POST" enctype="multipart/form-data" id="update-form" style="display: none;">
+              <div id="editor-text"></div>
+              <input type="hidden" name="content" id="postData">
+              <button class="button-success pure-button decline" id="decline-btn">Decline</button>
+              <button type="submit" class="button-success pure-button" id="submit-btn">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="pure-u-1 pure-u-lg-1-2">
+      <div class="content-right-large activities postbar">
+        {% if data.own_profile %}
+          <h2>Your Activities</h2>
+        {% else %}
+          <h2>{{data.user_name}}'s Activities</h2>
+        {% endif %}
+      </div>
+      <div class="separator"></div>
+      {% if data.recent_posts | length > 0 %}
+        <div id="posts" class="content-right-large postbar">
+          <div class="main_post_div pure-group">
+            <div class="pure-u-1-9" id="profile_posts">
+              <div id="content">
+                {% for recent_post in data.recent_posts %}
+                  {% set post_link = data.post_url + recent_post[2].lower() + "/?page=" + recent_post[0] %}
+                  <div class="post ql-editor">
+                    {% if recent_post[8] == "POST" %}
+                      <h2 class="post_title"><a class=hidden-link-button href='{{post_link}}'>{{recent_post[0]}}</a></h2>
+                    {% else %}
+                      <h2 class="post_title"><a class="hidden-link-button" href="{{ url_for('create_post.detail', post_id=recent_post[7]) }}">{{recent_post[0]}}</a></h2>
+                    {% endif %}
+                    <div class="author">
+                      <div class="pure-g">
+                        <div class="pure-u-1-9">
+                          <img class="avatar_img pure-img" src="{{recent_post[6]}}" alt="Avatar">
+                        </div>
+                        <div class="pure-u-1-9">
+                          <h4 class="author_name">{{recent_post[5]}}</h4>
+                        </div>
+                        <div class="pure-u-1-9">
+                          <p class="post_date">• {{recent_post[3]}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="post-content">
+                      {{recent_post[1]|safe}} 
+                    </div>
+                    <!-- get the loading_url and error html-->
+                    <div id="loading-url" style="display:none">{{ loading_url }}</div>
+                    <div id="error-url" style="display:none">{{ error_url }}</div>
+                    <i id="like_button_{{recent_post[7]}}" class="like_button fa-regular fa-heart fa-lg"></i>
+                    <div class="button_like" data-id="{{recent_post[7]}}"></div>
+                    {% if recent_post[8] == "DISCUSSION" %}
+                      <a class="hidden-link-button" href="{{ url_for('create_post.detail', post_id=recent_post[7]) }}"><i id="comment_button" class="fa-regular fa-comment fa-lg"></i>&nbsp;&nbsp;&nbsp;{{recent_post[9]}}</a>
+                    {% endif %}
+                  </div>
+                  <div class="separator"></div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="page-buttons">
+          <h4>Page {{data.page + 1}}</h4>
+          {% if data.page > 0 %}
+            <a id="left-page-button" href="?page={{data.page-1}}"><i class="fa-solid fa-square-caret-left fa-lg"></i></a>
+          {% else %}
+            <a id="left-page-button"><i class="fa-regular fa-square-caret-left fa-lg"></i></a>
+          {% endif %}
+
+          {% if data.page < data.page_count-1 %}
+            <a id = "right-page-button" href="?page={{data.page+1}}"><i class="fa-solid fa-square-caret-right fa-lg"></i></a>
+          {% else %}
+            <a id="right-page-button"><i class="fa-regular fa-square-caret-right fa-lg"></i></a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="pure-u-1 pure-u-lg-1-4">
+      <div class="content-right">
+        {% if data.own_profile %}
+          <h2>Following</h2>
+        {% else %}
+          <h2>Followers</h2>
+        {% endif %}
+        {% if data.followers or data.following %}
+          <div class="fans pure-g">
+            <div class="fan pure-g">
+              {% if data.own_profile == False %}
+                {% for follower in data.followers %}
+                  <div class="pure-u-1-4">
+                    <img class="avatar_img fan-img pure-img" src="{{follower[0][2]}}" alt="Avatar">
+                  </div>
+                  <div class="pure-u-1-2">
+                    <h4><a id="follower_link" href="{{ url_for('profile.get_profile_page', username=follower[0][1]) }}">{{follower[0][1]}}</a></h4>
+                  </div>
+                  <div class="pure-u-1-4"></div>
+                {% endfor %}
+              {% endif %}
+              {% if data.own_profile %}
+                {% for following in data.following %}
+                  <div class="pure-u-1-4">
+                    <img class="avatar_img fan-img pure-img" src="{{following[0][2]}}" alt="Avatar">
+                  </div>
+                  <div class="pure-u-1-2">
+                    <h4><a id="following_link" href="{{ url_for('profile.get_profile_page', username=following[0][1]) }}">{{following[0][1]}}</a></h4>
+                  </div>
+                  <div class="pure-u-1-4">
+                    <button data-id="{{following[0][1]}}" id="remove-btn" class="pure-button remove-btn"><i class="fa-solid fa-user-xmark fa-xl"></i></button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+        {% else %}
+          {% if data.own_profile %}
+            <h4 id="follows">You are not currently following any users</h4>
+          {% else %}
+            <h4 id="follows">{{data.user_name}} currently has no followers</h4>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="separator"></div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base_rightbar.html" %}
+
+{% block css_links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/create_post.css') }}">
+{% endblock %}
+{% block js_scripts %}
+  <script src="{{ url_for('static', filename='js/create_post.js') }}"></script>
+{% endblock %}
+
+{% block title %}
+  Create Post
+{% endblock %}
+
+{% block main_content %}
+  <div class="left">
+    <h2>Create Post</h2>
+  </div>
+  <br>
+
+  <form id="postForm" class="pure-form" method="post" enctype="multipart/form-data">
+    <div id="post-title">
+    <fieldset>
+      <input type="text" name="title" placeholder="Title" class="pure-input-1" required maxlength="64"/>
+    </fieldset>
+    </div>
+
+    <div class="editor-container">
+      <div id="editor"></div>
+    </div>
+    <input type="hidden" name="content" id="postData">
+
+    <div id="form_flex">
+      <div class="pure-form-stacked" id="category">
+        <label for="stacked-state">Posting in Mario Wiki:</label>
+          <select name="category" id="stacked-category" required>
+            <option value="">Select Category</option>
+            {% for category in data.categories %}
+              <option value={{category[0]}}>{{category[0]}}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+
+    <button class="pure-button" onclick="redirectHome()" type='button'>Cancel</button>
+    <button class="pure-button pure-button-primary" type='submit'>Create Post</button>
+  </form>
+{% endblock %}
+{% block right_content %}
+  <h3>Thumbnail</h3>
+  <img class = "pure-img" id="thumbnail-preview" src="{{ default_url }}" style="display: block; margin-left: auto; margin-right: auto;">
+  <div id="upload-thumbnail">
+    <label for="thumbnail-upload">Optionally Upload image:</label>
+    <input type="file" id="thumbnail-upload" name="thumbnail" accept="image/*" onchange="acceptThumbnail(this)" form="postForm" style="padding-top: 0.5em;">
+  </div>
+{% endblock %}
+{% block secondary_right_content %} 
+  <div class="separator"></div>
+  <div class="content-right">
+    <h3 style="text-align: center; display: inline-block;">Tags</h3>
+    <div class="pure-form-stacked" id="tags_container">
+      <div id="tags">
+        {% for tag in data.all_tags %}
+          <label for="{{tag[0]}}" class="pure-checkbox">
+            <input type="checkbox" id="{{tag[0]}}" name="tags_check" value="{{tag[0]}}" form="postForm"/> {{tag[0]}}
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

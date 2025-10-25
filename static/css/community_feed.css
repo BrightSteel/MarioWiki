@@ -1,0 +1,313 @@
+.post {
+  text-align: left;
+  line-height: normal;
+  height: auto;
+  box-sizing: initial;
+  white-space: normal;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+  padding-top: 0.5em;
+  margin-top: -0.5em;
+  background-color: white;
+  border-radius: 0.5em;
+}
+
+.author_name {
+  margin-left: 0.5em;
+  top: 0.9em;
+  left: 0.2em;
+  position: relative;
+}
+
+#author_link{
+  text-decoration: none !important;
+  color: black;
+}
+
+.post_date {
+  position: relative;
+  top: 1.2em;
+  left: 0.45em;
+  margin-left: 0.25em;
+  margin-top: 1.5em;
+  font-size: 0.875em;
+}
+
+div.author {
+  margin-top: -0.75em;
+  margin-bottom: 1.5em;
+}
+
+#button_like {
+  margin-top: -2.45em;
+}
+
+#like_button {
+  padding-right: 1.3em;
+}
+
+#like_button {
+  padding-right: 1.3em;
+}
+
+.avatar_img {
+  border-radius: 50%;
+  width: 3.1em; 
+  height: 3.1em; 
+  object-fit: cover;
+}
+
+#discussion-avatar {
+  margin-left: 1em; 
+  border-radius: 50%;
+  width: 3.1em; 
+  height: 3.1em; 
+  object-fit: cover;
+}
+
+
+div#filter-feed {
+  padding-bottom: 0.625em;
+}
+
+div#cancelButton {
+  padding-top: 0.625em;
+  padding-left: 0.3125em;
+}
+
+div#postButton {
+  padding-top: 0.625em;
+  padding-left: 0.3125em;
+}
+
+#makePost {
+  margin-top: 0.625em;
+  margin-left: 0.3125em;
+}
+
+.ql-toolbar.ql-snow {
+  width: 100%
+}
+
+#postFilter {
+  text-align: left;
+  padding-bottom: 0.3125em;
+  padding-left: 0.625em;
+}
+
+div#make_post_div {
+  background-color: white;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  text-align: center;
+  border-radius: 0.5em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+div#content {
+  padding-top: 0;
+}
+
+h2#discussion_header {
+  margin-bottom: 1em;
+}
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 2.5em;
+  height: 1.25em;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1.25em;
+  width: 1.25em;
+  left: 0px;
+  bottom: 1px;
+  background-color: red;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(1.625em);
+  -ms-transform: translateX(1.625em);
+  transform: translateX(1.625em);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 2.125em;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+div#advancedFilter {
+  text-decoration: underline;
+  width: auto;
+}
+
+div#advancedFilter:hover {
+  cursor: pointer;
+  color: purple;
+}
+
+div#filterOptions {
+  display: none;
+}
+
+div#discussionTitle {
+  text-align: left;
+  padding-bottom: 0.3125em;
+  padding-left: 0.3125em;
+}
+
+div#postDicussionDiv {
+  display: none;
+}
+
+div#editor-container {
+  width: 100%;
+}
+
+div#cancel-post {
+  padding-right: 2%;
+}
+
+div#cancelPost-container {
+  display: flex;
+  padding: 2%;
+  gap: 3%
+}
+
+.post-content {
+  margin-bottom: 2em;
+  max-height: 24em;
+  overflow: hidden;
+}
+
+a#left-page-button, a#left-page-button:hover, a#left-page-button:focus, a#left-page-button:active, 
+a#right-page-button, a#right-page-button:hover, a#right-page-button:focus, a#right-page-button:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+#left-page-button {
+  position: relative;
+  right: 2.1em;
+  top: -2.4em;
+}
+
+#right-page-button {
+  position: relative;
+  left: 2.1em;
+  top: -2.4em;
+}
+
+div.page-buttons {
+  text-align: center;
+}
+
+.hidden-link-button {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+  position: relative;
+}
+
+.button_like {
+  margin-top: 0.5em;
+  display: inline-block;
+}
+
+.button_like img {
+  height:1em;
+  width:1em !important;
+}
+
+.like_button {
+  padding-right: 0.5em;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+
+#comment_button {
+  padding-left: 1em;
+  cursor: pointer;
+}
+
+h2#no_disc_filter {
+  color: red;
+  text-align: center;
+}
+
+h2#discussion_header a:hover,
+a#author_link:hover {
+  color: red;
+}
+
+@media screen and (max-width: 1023px) {
+  div.post {
+    margin-left: 3em;
+    margin-right: 3em;
+  }
+
+  div#make_post_div {
+    width: auto;
+    margin-left: 3em;
+    margin-right: 3em;
+  }
+
+  div#content-left {
+    width: auto;
+    margin-left: 3em;
+    margin-right: 3em;
+  }
+
+  div#content-right {
+    width: auto;
+    margin-left: 3em;
+    margin-right: 3em;
+  }
+}
+
+.ql-container{
+  height:100px;
+}

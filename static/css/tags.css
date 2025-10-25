@@ -1,0 +1,45 @@
+div.tag_post {
+  margin-top: 0;
+}
+
+.post-content {
+  max-height: 12em;
+  overflow: hidden;
+}
+
+.hidden-link-button {
+  text-decoration: none;
+  color: rgb(32, 124, 222);
+}
+
+.hidden-link-button:hover {
+  color: red;
+}
+
+div.post {
+  margin-right: 2.5em;
+}
+
+div#content-right-large {
+  background-color: #F1F1F1;
+  padding-top: 0;
+}
+
+@media screen and (max-width: 1023px) {
+  div.post {
+    margin-left: 3em;
+    margin-right: 3em;
+  }
+
+  div#content-left {
+    width: auto;
+    margin-left: 3em;
+    margin-right: 3em;
+  }
+
+  div#content-right-large {
+    width: auto;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

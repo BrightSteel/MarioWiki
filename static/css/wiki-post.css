@@ -1,0 +1,112 @@
+div#main-wiki {
+  text-align: left;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 1em;
+  padding-right: 1em;
+  line-height: 1.6;
+  height: auto;
+  white-space: normal;
+}
+
+.left-menu a#main_link {
+  line-height: 1.6;
+  margin-left: 1em;
+  text-decoration: none;
+}
+
+.left-menu a {
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+.left-menu {
+  text-align: left;
+}
+
+.wiki-title h2, h4{
+  margin-block: 0;
+  padding: 0;
+}
+
+.wiki-title {
+  margin-bottom: 1em;
+}
+
+hr {
+  margin: 0;
+}
+
+img.post_img {
+  float: right;
+  padding-left: 1em;
+  max-width: 18.75em;
+  height: auto;
+  background-color: white;
+}
+
+ol.contents_links {
+  list-style-type: none;
+}
+
+h2.h2_tag {
+  border-bottom: 1px solid;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+h3.h3_tag {
+  margin-top: 0.35em;
+}
+
+h4.h4_tag {
+  margin-top: 0.25em;
+}
+
+#edit-delete{
+  float: right;
+}
+
+#edit-btn {
+  margin-right: 0.5em;
+}
+
+.like_button.fa-regular.fa-heart.fa-lg {
+  cursor: pointer;
+}
+
+.button_like {
+  display: inline-block !important;
+}
+
+.button_like img {
+  height:1em;
+  width:1em !important;
+}
+
+#author_link{
+  text-decoration: none !important;
+  color: black;
+}
+#author_link:hover {
+  color: red;
+}
+
+div#content-right-large {
+  margin-bottom: 1em;
+  margin-right: 2.5em;
+}
+
+@media screen and (max-width: 1023px) {
+  div#content-right-large {
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  div#content-left {
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block css_links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+{% endblock %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+  <div id="searchDiv">
+    <div>
+      <h1>Search Mario Wiki</h1>
+    </div>
+    <form method="get" action="/search/results" id="searchForm" class="pure-form pure-form-stacked">
+      <fieldset>
+        <div id="searchBar">
+          <label for="search_query">
+            <input required type="text" class="pure-input-rounded" id="search_query" name="search_query" placeholder="Search" value="{{ data.query }}">
+          </label>
+          <input type="hidden" value="{{data.filter}}" name="filter" id="filter">
+        </div>
+        <br>
+        <button type="submit" class="pure-button pure-button-primary">Search</button>
+      </fieldset>
+    </form>
+  </div>
+  {% if data.get("is_search") %}
+    <div id="searchResults">
+      {% if data.search_results | length > 0 %}
+        {% if data.filter == "post" %}
+          <h2 id="result_header">Showing <em>Wiki Pages</em> for <em>{{ data.query }}</em></h2>
+        {% elif data.filter == "discussion" %}
+          <h2 id="result_header">Showing <em>Discussion Pages</em> for <em>{{ data.query }}</em></h2>
+        {% else %}
+          <h2 id="result_header">Showing <em>{{data.filter | title }}</em> for <em>{{ data.query }}</em></h2>
+        {% endif %}
+      {% else %}
+        {% if data.filter == "post" %}
+          <h2 id="no_results">No <em>Wiki Pages</em> Results for <em>{{ data.query }}</em></h2>
+        {% elif data.filter == "discussion" %}
+          <h2 id="no_results">No <em>Discussion Posts</em> Results for <em>{{ data.query }}</em></h2>
+        {% else %}
+          <h2 id="no_results">No <em>{{ data.filter | title }}</em> Results for <em>{{ data.query }}</em></h2>
+        {% endif %}
+      {% endif %}
+      <!-- This is practically the base_leftbar template, but I wanted to
+           use a combination of the standard base template and the base_leftbar
+           template. -->
+      <div class="pure-g">
+        <div class="pure-u-1 pure-u-lg-1-4 search_filters">
+          <div class="separator"></div>
+          <div id="content-left">
+            <div class="pure-menu">
+              <span class="pure-menu-heading">Post Types</span>
+              <ul class="pure-menu-list">
+                <li class="pure-menu-item">
+                  <a href="?search_query={{data.query}}" class="pure-menu-link">All Posts</a>
+                </li>
+                <li class="pure-menu-item">
+                  <a href="?search_query={{data.query}}&filter=post" class="pure-menu-link">Wiki Pages</a>
+                </li>
+                <li class="pure-menu-item">
+                  <a href="?search_query={{data.query}}&filter=discussion" class="pure-menu-link">Discussion Posts</a>
+                </li>
+              </ul>
+            </div>
+            <div class="separator"></div>
+            <div class="pure-menu">
+              <span class="pure-menu-heading">Categories</span>
+              <ul class="pure-menu-list">
+                <li class="pure-menu-item">
+                  <a href="?search_query={{data.query}}&filter=characters" class="pure-menu-link">Characters</a>
+                </li>
+                <li class="pure-menu-item">
+                  <a href="?search_query={{data.query}}&filter=games" class="pure-menu-link">Games</a>
+                </li>
+                <li class="pure-menu-item">
+                  <a href="?search_query={{data.query}}&filter=content" class="pure-menu-link">Content</a>
+                </li>
+              </ul>
+            </div>
+            <div class="separator"></div>
+            <div class="pure-menu">
+              <span class="pure-menu-heading">User Profiles</span>
+              <ul class="pure-menu-list">
+                <li class="pure-menu-item">
+                  <a href="?search_query={{data.query}}&filter=profiles" class="pure-menu-link">User Profiles</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        {% if data.search_results | length > 0 %}
+          <div class="pure-u-1 pure-u-lg-3-4 search_results">
+            <div class="separator"></div>
+            {% for result in data.search_results %}
+              {% if data.filter != "profiles" %}
+                {% set post_link = data.post_url + result.category.lower() + "/?page=" + result.title %}
+                <div class="search_result post ql-editor">
+                  {% if result.post_type == "POST" %}
+                    <h2 class="post_title"><a class="hidden-link-button" href="{{ post_link }}">{{ result.title }}</a></h2>
+                  {% else %}
+                    <h2 class="post_title"><a class="hidden-link-button" href="{{ url_for('create_post.detail', post_id=result.id) }}">{{ result.title }}</a></h2>
+                  {% endif %}
+                  <div class="post-content">
+                    {{ result.raw_text }}
+                  </div>
+                </div>
+                <div class="separator"></div>
+              {% else %}
+                <div class="search_result post ql-editor">
+                  <h2 class="post_title"><a class="hidden-link-button" href="{{ url_for('profile.get_profile_page', username=result.username) }}">{{result.username}}</a></h2>
+                  <div class="post-content">
+                    {{ result.bio | safe }} 
+                  </div>
+                </div>
+                <div class="separator"></div>
+              {% endif %}
+            {% endfor %}
+
+            <h4 id="page_header">Page {{ data.page + 1 }}</h4>
+            <div class="page-buttons">
+              {% if data.page > 0 %}
+                <a id="left-page-button" href="?search_query={{data.query}}&page={{data.page-1}}&filter={{data.filter}}"><i class="fa-solid fa-square-caret-left fa-lg"></i></a>
+              {% else %}
+                <a id="left-page-button"><i class="fa-regular fa-square-caret-left fa-lg"></i></a>
+              {% endif %}
+
+              {% if data.page < data.page_count-1 %}
+                <a id="right-page-button" href="?search_query={{data.query}}&page={{data.page+1}}&filter={{data.filter}}"><i class="fa-solid fa-square-caret-right fa-lg"></i></a>
+              {% else %}
+                <a id="right-page-button"><i class="fa-regular fa-square-caret-right fa-lg"></i></a>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

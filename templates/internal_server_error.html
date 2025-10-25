@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Internal Server Error
+{% endblock %}
+
+{% block css_links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/not_found.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="separator"></div>
+  <div class="pure-g">
+    <div class="pure-u-1-4"></div>
+    <div class="pure-u-2-4" id="not_found">
+      <h2>500</h2>
+      <h4>Sorry, unexpected error</h4>
+      <p>We are working on fixing the problem. Be back soon.</p>
+    </div>
+    <div class="pure-u-1-4"></div>
+  </div>
+  <div class="separator"></div>  
+{% endblock %}
