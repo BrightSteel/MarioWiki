@@ -48,6 +48,13 @@ def get_db_cursor(commit=False):
 
 def make_table():
   with get_db_cursor(True) as cur:
+    cur.execute("""CREATE TABLE IF NOT EXISTS users(
+                    user_id VARCHAR(128) NOT NULL, 
+                    username VARCHAR(32) NOT NULL, 
+                    photo_url VARCHAR(256), 
+                    bio TEXT, 
+                    PRIMARY KEY (user_id))""")
+    
     cur.execute("""CREATE TABLE IF NOT EXISTS posts(
                     id SERIAL, 
                     user_id VARCHAR(128) NOT NULL, 
@@ -58,7 +65,7 @@ def make_table():
                     post_type VARCHAR(16) NOT NULL, 
                     likes INT NOT NULL DEFAULT 0, 
                     raw_text TEXT NOT NULL,
-                    thumbnail VARCHAR(128) NOT NULL,
+                    thumbnail VARCHAR(128),
                     PRIMARY KEY (id),
                     FOREIGN KEY (user_id) REFERENCES users(user_id))""")
         
@@ -77,13 +84,6 @@ def make_table():
                     description TEXT, 
                     photo VARCHAR(256), 
                     PRIMARY KEY (title))""")
-        
-    cur.execute("""CREATE TABLE IF NOT EXISTS users(
-                    user_id VARCHAR(128) NOT NULL, 
-                    username VARCHAR(32) NOT NULL, 
-                    photo_url VARCHAR(256), 
-                    bio TEXT, 
-                    PRIMARY KEY (user_id))""")
         
     cur.execute("""CREATE TABLE IF NOT EXISTS user_followers(
                     user_id VARCHAR(128) NOT NULL, 

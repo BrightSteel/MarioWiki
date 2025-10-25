@@ -1,6 +1,7 @@
 from flask import *
 import db
 import utils
+from os import environ as env
 
 bp = Blueprint("community", __name__, url_prefix="/community")
 @bp.route("/")
@@ -56,14 +57,19 @@ def community():
     
   for post in recent_posts:
     post[3] = utils.get_elapsed_time(post[3]) # convert timestamp to elapsed time
+    if post[6] == None:
+      post[6] = env['DEFAULT_AVATAR']
     post.append(db.get_num_comments_by_post_id(post[7])[0])
 
   if session.get("user"):
     user_id = session["user"]["userinfo"]["sub"]
     user = db.get_user_by_id(user_id)
-    user_img = user[0]['photo_url']
+    if user[0]['photo_url'] is None:
+      user_img = env['DEFAULT_AVATAR']
+    else:
+      user_img = user[0]['photo_url']
   else: 
-    user_img = None
+    user_img = env['DEFAULT_AVATAR']
 
   all_posts = db.get_all_posts()
   a_z_dicts = utils.get_a_to_z_dicts(all_posts)
@@ -127,9 +133,12 @@ def community_following():
   if session.get("user"):
     user_id = session["user"]["userinfo"]["sub"]
     user = db.get_user_by_id(user_id)
-    user_img = user[0]['photo_url']
+    if user[0]['photo_url'] is None:
+      user_img = env['DEFAULT_AVATAR']
+    else:
+      user_img = user[0]['photo_url']
   else: 
-    user_img = None
+    user_img = env['DEFAULT_AVATAR']
 
   following = db.get_following(user_id)
   posts_by_following = []

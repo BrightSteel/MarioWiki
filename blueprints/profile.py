@@ -16,7 +16,10 @@ def profile():
       return update()
     user_id = session["user"]["userinfo"]["sub"]
     user = db.get_user_by_id(user_id)
-    user_img = user[0]['photo_url']
+    if user[0]['photo_url'] is None:
+      user_img = env['DEFAULT_AVATAR']
+    else:
+      user_img = user[0]['photo_url']
     user_bio = user[0]['bio']
     user_name = session["user"]["userinfo"]["nickname"]
     post_count = db.get_post_count_by_user(user_id)[0]
@@ -79,7 +82,10 @@ def get_profile_page(username):
     user_id = user[0]['user_id']
   except Exception as e:
     abort(404)
-  user_img = user[0]['photo_url']
+  if user[0]['photo_url'] is None:
+    user_img = env['DEFAULT_AVATAR']
+  else:
+    user_img = user[0]['photo_url']
   user_bio = user[0]['bio']
   user_name = user[0]['username']
   is_follower = False
